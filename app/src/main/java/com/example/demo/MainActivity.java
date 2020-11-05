@@ -1,22 +1,16 @@
 package com.example.demo;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.view.Menu;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 
 public class MainActivity extends Activity {
 
@@ -24,7 +18,7 @@ public class MainActivity extends Activity {
     public TextView device, tett;
     private ImageButton btnSpeak;
     private final int REQ_CODE_SPEECH_INPUT = 1;
-
+    String [] array;
     /*Khai báo các biến cần thiết */
 
     @Override
@@ -81,7 +75,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<String> result1= new ArrayList<String>();
+        ArrayList<String> result1= new ArrayList<String>();     // Khai báo một arraylist result1 để chứa chuỗi được nói vào.
 //        switch (requestCode) {
 //            case REQ_CODE_SPEECH_INPUT: {   /* kiểm tra requestCode có trùng với REQ_*/
 //                if (resultCode == RESULT_OK && null != data) { /*RESULT_OK chỉ ra rằng kết quả này đã thành công*/
@@ -94,48 +88,18 @@ public class MainActivity extends Activity {
 //                break;
 //            }
 //        }
-        result1 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-        txtSpeechInput.setText(result1.get(0).toString());
-////        // Trả về một mảng chuỗi kí tự được nói vào.
-        StringBuffer result = new StringBuffer();
-        for (String s : result1){
-            result.append(s);
-            result.append(" ");
-        }
-        String chuoi = result.toString();
-        device.setText(result.toString());
-    }
-    public enum RELAY{
-        RELAY1_ON,
-        RELAY1_OFF,
-        RELAY2_ON,
-        RELAY2_OFF;
-    }
-    public RELAY kiemtra(){
-
-        String str;
-        str = device.getText().toString();
+        result1 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);     // reusult1 được lấy giá trị mảng chuỗi kí tự nói vào
+        txtSpeechInput.setText(result1.get(0).toString());                          // Hiển thị text ra màn hình
+        String str = result1.toString();                                            // Chuyển arraylist thành một mảng chuỗi thuần
+        str = str.replace("[","");                                // Xóa 2 kí tự []
+        str = str.replace("]","");
         System.out.println(str);
-        tett.setText(str.toString());
-        RELAY status = null;
-        if (str.equals("bật")){
-            status = RELAY.RELAY1_ON;
-            Toast.makeText(MainActivity.this,"Thiet bi 1 da duoc bat!",Toast.LENGTH_SHORT).show();
+        array = str.split(" ");
+        System.out.println(array.length);
+        for (int i=0;i<array.length;i++){
+            System.out.println(array[i]);
         }
-        else if (str.equals("tắt thiết bị 1")){
-            status = RELAY.RELAY1_OFF;
-            Toast.makeText(MainActivity.this,"Thiet bi 1 da duoc tat!",Toast.LENGTH_SHORT).show();
         }
-        if (str.equals("bật thiết bị 2")){
-            status = RELAY.RELAY2_ON;
-            Toast.makeText(MainActivity.this,"Thiet bi 2 da duoc bat!",Toast.LENGTH_SHORT).show();
-        }
-        else if (str.equals("tắt thiết bị 2")){
-            status = RELAY.RELAY2_OFF;
-            Toast.makeText(MainActivity.this,"Thiet bi 2 da duoc tat!",Toast.LENGTH_SHORT).show();
-        }
-        return status;
-    }
     }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
