@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.View;
+import android.webkit.ConsoleMessage;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,10 +16,15 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
     private TextView txtSpeechInput;
-    public TextView device, tett;
+    public TextView  device1, device2;
     private ImageButton btnSpeak;
     private final int REQ_CODE_SPEECH_INPUT = 1;
-    String [] array;
+    String[] array;
+    ArrayList<String> result1 = new ArrayList<String>();
+    TestMang tm = new TestMang(array);
+    TestRelay tr = new TestRelay(array);
+    XuLiMang xlm = new XuLiMang(result1);
+    String done, dv1, dv2;
     /*Khai báo các biến cần thiết */
 
     @Override
@@ -28,13 +34,11 @@ public class MainActivity extends Activity {
 
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
-        device=(TextView) findViewById(R.id.device);
-        tett = (TextView) findViewById(R.id.tett);
+        device1 = (TextView) findViewById(R.id.device1);
+        device2 = (TextView) findViewById(R.id.device2);
         // ánh xạ các biến qua id của button và text
-
-
         btnSpeak.setOnClickListener(new View.OnClickListener() {
-        // Phương thức lấy tác động khi nhấn vào button
+            // Phương thức lấy tác động khi nhấn vào button
             @Override
             public void onClick(View v) {
                 promptSpeechInput();
@@ -45,7 +49,7 @@ public class MainActivity extends Activity {
 
     /**
      * Showing google speech input dialog
-     * */
+     */
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         //-	Bắt đầu một hoạt động sẽ nhắc người dùng về giọng nói và gửi nó qua quá trình nhận dạng,
@@ -69,13 +73,14 @@ public class MainActivity extends Activity {
         }
         // Nếu không tìm thấy hoạt động của intent, hiển thị ra màn hình 3s dòng chữ "Sorry...
     }
+
     /**
      * Receiving speech input
-     * */
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<String> result1= new ArrayList<String>();     // Khai báo một arraylist result1 để chứa chuỗi được nói vào.
+            // Khai báo một arraylist result1 để chứa chuỗi được nói vào.
 //        switch (requestCode) {
 //            case REQ_CODE_SPEECH_INPUT: {   /* kiểm tra requestCode có trùng với REQ_*/
 //                if (resultCode == RESULT_OK && null != data) { /*RESULT_OK chỉ ra rằng kết quả này đã thành công*/
@@ -90,17 +95,22 @@ public class MainActivity extends Activity {
 //        }
         result1 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);     // reusult1 được lấy giá trị mảng chuỗi kí tự nói vào
         txtSpeechInput.setText(result1.get(0).toString());                          // Hiển thị text ra màn hình
-        String str = result1.toString();                                            // Chuyển arraylist thành một mảng chuỗi thuần
-        str = str.replace("[","");                                // Xóa 2 kí tự []
-        str = str.replace("]","");
-        System.out.println(str);
-        array = str.split(" ");
-        System.out.println(array.length);
-        for (int i=0;i<array.length;i++){
-            System.out.println(array[i]);
-        }
-        }
-    }
+
+
+
+        array = xlm.XuLi(result1);
+        dv1 = device1.getText().toString();
+        dv2 = device2.getText().toString();
+        done = tm.kiemtramang(array);
+        RELAY status = tr.kiemtrathietbi(array,dv1,dv2);
+        if (status == RELAY.RELAY1_ON)
+            System.out.println("hh");
+        if (status == RELAY.RELAY_PULL)
+            System.out.println("abc");
+       }
+
+
+}
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
