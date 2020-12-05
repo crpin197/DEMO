@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            // Khai báo một arraylist result1 để chứa chuỗi được nói vào.
+        // Khai báo một arraylist result1 để chứa chuỗi được nói vào.
 //        switch (requestCode) {
 //            case REQ_CODE_SPEECH_INPUT: {   /* kiểm tra requestCode có trùng với REQ_*/
 //                if (resultCode == RESULT_OK && null != data) { /*RESULT_OK chỉ ra rằng kết quả này đã thành công*/
@@ -97,18 +97,20 @@ public class MainActivity extends Activity {
         txtSpeechInput.setText(result1.get(0).toString());                          // Hiển thị text ra màn hình
 
 
+    array = xlm.XuLi(result1);
+    done = tm.kiemtramang(array);
+    dv1 = device1.getText().toString();
+    dv2 = device2.getText().toString();
+    RELAY d2 = tr.kiemtrathietbi2(array,dv2);
+    RELAY d1 = tr.kiemtrathietbi1(array,dv1);
 
-        array = xlm.XuLi(result1);
-        dv1 = device1.getText().toString();
-        dv2 = device2.getText().toString();
-        done = tm.kiemtramang(array);
-        RELAY status = tr.kiemtrathietbi(array,dv1,dv2);
-        if (status == RELAY.RELAY1_ON)
-            System.out.println("hh");
-        if (status == RELAY.RELAY_PULL)
-            System.out.println("abc");
-       }
-
+    if (d1 == RELAY.RELAY_ON)
+        System.out.println("BINH");
+    if (d2 == RELAY.RELAY_ON)
+        System.out.println("LEBINH");
+    for (int i=0;i<array.length;i++)
+        System.out.println(array[i]);
+}
 
 }
 //    @Override

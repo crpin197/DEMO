@@ -22,6 +22,8 @@ public class XuLiMang {
         str = str.replace("[", "");                                // Xóa 2 kí tự []
         str = str.replace("]", "");
         array = str.split(" ");
+        for (int i=0;i<array.length;i++)
+            array[i]=array[i].toLowerCase();
         return array;
     }
 }

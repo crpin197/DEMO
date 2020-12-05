@@ -21,13 +21,16 @@ public class TestMang {
     public String kiemtramang (String [] array1){
         String done=null;
         for (int i=0;i<array1.length;i++){
-            if (array1[i].equals("bật"))
+            if (array1[i].equals("bật")) {
                 done = array1[i];
-            else if (array1[i].equals("tắt"))
-                done = array1[i];
-            else {
-                done = "KHONG";
+                break;
             }
+          else if(array1[i].equals("tắt")) {
+                done = array1[i];
+                break;
+            }
+          else
+              done = "KHONG";
         }
         return done;
     }

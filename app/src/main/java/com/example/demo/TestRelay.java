@@ -15,29 +15,46 @@ public class TestRelay extends  TestMang{
     public void setArray(String[] array) {
         this.array = array;
     }
-    public RELAY kiemtrathietbi(String [] array, String dv1, String dv2){
-        RELAY status = null;
+    public RELAY kiemtrathietbi1(String [] array, String dv1){
+        RELAY device1 = null;
         TestMang tm = new TestMang(array);
         String done = tm.kiemtramang(array);
         for (int i=0;i<array.length;i++){
             if (done.equals("bật")){
                 if (array[i].equals(dv1))
-                    status = RELAY.RELAY1_ON;
-                if (array[i].equals(dv2))
-                    status = RELAY.RELAY2_ON;
+                    device1 = RELAY.RELAY_ON;
             }
             else if (done.equals("tắt"))
             {
                 if (array[i].equals(dv1))
-                    status = RELAY.RELAY1_OFF;
-                if (array[i].equals(dv2))
-                    status = RELAY.RELAY2_OFF;
+                    device1 = RELAY.RELAY_OFF;
             }
             else
             {
-                  status = RELAY.RELAY_PULL;
+                device1 = RELAY.RELAY_NOPULL;
             }
         }
-        return status;
+        return device1;
+    }
+    public RELAY kiemtrathietbi2(String [] array, String dv2){
+        RELAY device2 = null;
+        TestMang tm = new TestMang(array);
+        String done = tm.kiemtramang(array);
+        for (int i=0;i<array.length;i++){
+            if (done.equals("bật")){
+                if (array[i].equals(dv2))
+                    device2 = RELAY.RELAY_ON;
+            }
+            else if (done.equals("tắt"))
+            {
+                if (array[i].equals(dv2))
+                    device2 = RELAY.RELAY_OFF;
+            }
+            else
+            {
+                device2 = RELAY.RELAY_NOPULL;
+            }
+        }
+        return device2;
     }
 }
