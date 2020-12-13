@@ -1,8 +1,8 @@
 package com.example.demo;
 
-public enum RELAY {
+public enum state_device {
     RELAY_ON,
     RELAY_OFF,
-    RELAY_DISCONECTED,
+    RELAY_DISCONNECTED,
     RELAY_NOPULL;
 }

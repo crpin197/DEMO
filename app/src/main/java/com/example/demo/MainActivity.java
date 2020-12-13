@@ -16,15 +16,15 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
     private TextView txtSpeechInput;
-    public TextView  device1, device2;
+    public TextView  device_1, device_2;
     private ImageButton btnSpeak;
     private final int REQ_CODE_SPEECH_INPUT = 1;
     String[] array;
     ArrayList<String> result1 = new ArrayList<String>();
-    TestMang tm = new TestMang(array);
-    TestRelay tr = new TestRelay(array);
-    XuLiMang xlm = new XuLiMang(result1);
     String done, dv1, dv2;
+
+    device_and_state device1 = new device_and_state();
+    device_and_state device2 = new device_and_state();
     /*Khai báo các biến cần thiết */
 
     @Override
@@ -34,8 +34,8 @@ public class MainActivity extends Activity {
 
         txtSpeechInput = (TextView) findViewById(R.id.txtSpeechInput);
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
-        device1 = (TextView) findViewById(R.id.device1);
-        device2 = (TextView) findViewById(R.id.device2);
+        device_1 = (TextView) findViewById(R.id.device1);
+        device_2 = (TextView) findViewById(R.id.device2);
         // ánh xạ các biến qua id của button và text
         btnSpeak.setOnClickListener(new View.OnClickListener() {
             // Phương thức lấy tác động khi nhấn vào button
@@ -95,22 +95,85 @@ public class MainActivity extends Activity {
 //        }
         result1 = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);     // reusult1 được lấy giá trị mảng chuỗi kí tự nói vào
         txtSpeechInput.setText(result1.get(0).toString());                          // Hiển thị text ra màn hình
+        dv1 = device_1.getText().toString();
+        dv2 = device_2.getText().toString();
+        array = ProcessMicro(result1);
+        //done = inspect_activity(array);
+        inspect_device(array);
 
 
-    array = xlm.XuLi(result1);
-    done = tm.kiemtramang(array);
-    dv1 = device1.getText().toString();
-    dv2 = device2.getText().toString();
-    RELAY d2 = tr.kiemtrathietbi2(array,dv2);
-    RELAY d1 = tr.kiemtrathietbi1(array,dv1);
 
-    if (d1 == RELAY.RELAY_ON)
-        System.out.println("BINH");
-    if (d2 == RELAY.RELAY_ON)
-        System.out.println("LEBINH");
-    for (int i=0;i<array.length;i++)
-        System.out.println(array[i]);
-}
+        System.out.println(device1.getName_bedroom());
+        System.out.println(device1.getState_bedroom());
+        System.out.println("\n\n");
+        System.out.println(device2.getName_bedroom());
+        System.out.println(device2.getState_bedroom());
+
+
+    }
+    public String [] ProcessMicro(ArrayList <String> result){
+        String str = result.toString();                                            // Chuyển arraylist thành một mảng chuỗi thuần
+        str = str.replace("[", "");                                // Xóa 2 kí tự []
+        str = str.replace("]", "");
+        array = str.split(" ");
+        for (int i=0;i<array.length;i++)
+            array[i]=array[i].toLowerCase();
+        return array;
+    }
+    public String inspect_activity (String [] array){
+        String done=null;
+        for (int i=0;i<array.length;i++){
+            if (array[i].equals("turn")&&array[i+1].equals("on")) {
+                done = "turn on";
+                break;
+            }
+            else if (array[i].equals("turn")&&array[i+1].equals("off")) {
+                done = "turn off";
+                break;
+            }
+            else
+                done = "NULL";
+        }
+        return done;
+    }
+    public void inspect_device(String [] array){
+         done = inspect_activity(array);
+
+        for (int i=0;i<array.length;i++){
+            if (done.equals("turn on")){
+                if (array[i].equals(dv1))
+                {
+                    device1.setName_bedroom(name_device.THE_LIGHT);
+                    device1.setState_bedroom(state_device.RELAY_ON);
+                }
+                if (array[i].equals(dv2))
+                {
+                    device2.setName_bedroom(name_device.THE_FAN);
+                    device2.setState_bedroom(state_device.RELAY_ON);
+                }
+            }
+            if (done.equals("turn off"))
+            {
+                if (array[i].equals(dv1))
+                {
+                    device1.setName_bedroom(name_device.THE_LIGHT);
+                    device1.setState_bedroom(state_device.RELAY_OFF);
+                }
+                if (array[i].equals(dv2))
+                {
+                    device2.setName_bedroom(name_device.THE_FAN);
+                    device2.setState_bedroom(state_device.RELAY_OFF);
+                }
+            }
+//            else
+//            {
+//                device1.setName_bedroom(name_device.NO_NAME);
+//                device1.setState_bedroom(state_device.RELAY_NOPULL);
+//                device2.setName_bedroom(name_device.NO_NAME);
+//                device2.setState_bedroom(state_device.RELAY_NOPULL);
+//            }
+        }
+    }
 
 }
 //    @Override

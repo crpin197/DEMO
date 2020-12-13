@@ -69,8 +69,8 @@
         android:layout_marginStart="58dp"
         android:layout_marginLeft="58dp"
         android:layout_marginBottom="213dp"
-        android:textColor="#EF0909"
-        android:text="đèn" />
+        android:text="light"
+        android:textColor="#EF0909" />
 
     <TextView
         android:id="@+id/device2"
@@ -82,7 +82,7 @@
         android:layout_marginEnd="51dp"
         android:layout_marginRight="51dp"
         android:layout_marginBottom="213dp"
-        android:textColor="#EF0909"
-        android:text="quạt" />
+        android:text="fan"
+        android:textColor="#EF0909" />
 
 </RelativeLayout>
